@@ -2,16 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import postStyle from "../../styles/posts.module.css";
 import { connect } from "react-redux";
-import * as funcsFromStore from '../../store/store';
+import * as funcsFromStore from "../../store/store";
 
-const Post = ({storeId} : {storeId : String}) => {
-  const [post, setPost] = useState([]);
+const Post = ({ storeId }: { storeId: String }) => {
+  const [post, setPost] = useState({title: "", body: "", comments: [{body: ""}]});
 
   useEffect(() => {
     axios
-      .get(
-        `https://simple-blog-api.crew.red/posts/${storeId}?_embed=comments`
-      )
+      .get(`https://simple-blog-api.crew.red/posts/${storeId}?_embed=comments`)
       .then((res) => {
         setPost(res.data);
       })
@@ -27,16 +25,14 @@ const Post = ({storeId} : {storeId : String}) => {
       <p className={postStyle.openedPostCommentsInfo}>
         commetns: {post?.comments?.length}
       </p>
-      {
-        post?.comments?.map(comment => (
-          <p key={comment.body} className={postStyle.comment}>
-            {comment.body}
-          </p>
-        ))
-      }
+      {post?.comments?.map((comment) => (
+        <p key={comment?.body} className={postStyle.comment}>
+          {comment.body}
+        </p>
+      ))}
     </section>
   );
-}
+};
 
 const storeFuncs: { applyId: any } = {
   applyId: funcsFromStore.applyId,
